@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-web';
 
 // create a component
-function LoginForm(){
+const LoginForm = () => {
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 
@@ -36,7 +36,7 @@ const submit = () => {
            <TextInput
            keyboardType="email-address"
            placeholder="Email"
-           oneChangeText={handleEmail}
+           onChangeText={handleEmail}
            value={email}
            />
            

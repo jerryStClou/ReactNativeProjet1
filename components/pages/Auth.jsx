@@ -16,7 +16,7 @@ export default function Auth() {
             <Text style={{fontSize:'1.3em'}}>composant potentiel</Text>
             {isLogin ? <LoginForm/> : <SignupForm/>}
             <Text style={styles.link} onPress={toggleIsLogin}>Formulaire</Text>
-            {isLogin ? 'pas encore membre? inscrivez-vous' : 'Deja membre? Connectez-vous'}
+            <Text>{isLogin ? 'pas encore membre? inscrivez-vous' : 'Deja membre? Connectez-vous'}</Text>
 
         </Card>
     </View>
