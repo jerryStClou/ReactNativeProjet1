@@ -1,114 +1,113 @@
-//import liraries
-import React, { Component, useState  } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { TextInput } from 'react-native-web';
-import { AntDesign } from '@expo/vector-icons';
-import Bouton from '../ui/Bouton';
-import InputWithError from '../ui/inputWithError/inputWithError';
+import { useContext, useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import Bouton from "../ui/Bouton";
+import { AntDesign } from "@expo/vector-icons";
+import InputWithError from "../ui/inputWithError/inputWithError";
+import { colors } from "../../libs/variable";
+import { UtilisateurContext } from "../../App";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+export default function SignupForm() {
+	// Créer les variables
+	const [email, setEmail] = useState("");
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+	const [emailError, setEmailError] = useState("");
+	const [usernameError, setUsernameError] = useState("");
+	const [passwordError, setPasswordError] = useState("");
+	const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
-// create a component
-function SignupForm(){
-    const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
-const [confirmPassword, setConfirmPassword] = useState("");
-const [userName, setuserName] = useState("");
+  const objet = useContext(UtilisateurContext);
 
 
-const [emailError, setEmailError] = useState("");
-const [passwordError, setPasswordError] = useState("");
-const [confirmPasswordError, setConfirmPasswordError] = useState("");
+	// Créer les fonction qui s'executent quand l'utilisateur tape dans les champs
+	const handleEmail = (text) => {
+		setEmailError("");
+		setEmail(text);
+	};
+	const handleUsername = (text) => {
+		setUsernameError("");
+		setUsername(text);
+	};
+	const handlePassword = (text) => {
+		setPasswordError("");
+		setPassword(text);
+	};
+	const handleConfirmPassword = (text) => {
+		setConfirmPasswordError("");
+		setConfirmPassword(text);
+	};
 
-const [userNameError, setUserNameError] = useState("");
+	// Fonction qui s'execute quand l'utilisateur submit
+	const submit = async () => {
+		if (
+			email.includes("@") &&
+			username.length >= 3 &&
+			username.length < 12 &&
+			password.length >= 6 &&
+			password === confirmPassword
+		) {
+			// Envoyer une requete vers la backend
+            await AsyncStorage.setItem(
+                "user",
+                JSON.stringify({email:email, username:username})
+            );
+			objet.setUtilisateur({email: email, username: username})
+			return;
+		}
+		setEmailError(!email.includes("@") ? "Email incorrect" : "");
+		setUsernameError(
+			username.length < 3 || username.length > 12
+				? "username incorrect (Max. 12, min. 3)"
+				: ""
+		);
+		setPasswordError(password.length < 6 ? "Mot de passe trop court" : "");
 
+		setConfirmPasswordError(
+			password !== confirmPassword ? "Les mots ne sont pas identiques" : ""
+		);
+	};
 
-const handleEmail = (text) => {
-    setEmailError("");
-    setEmail(text);
-};
-
-const handlePassword = (text) => {
-    setPasswordError("");
-    setPassword(text);
+	return (
+		<View style={styles.container}>
+			<InputWithError
+				valeur={email}
+				action={handleEmail}
+				type={"email-address"}
+				holder={"Entrez un email"}
+				errorMessage={emailError}
+			/>
+			<InputWithError
+				valeur={username}
+				action={handleUsername}
+				type={"email-address"}
+				holder={"Entrez un pseudo"}
+				errorMessage={usernameError}
+			/>
+			<InputWithError
+				valeur={password}
+				action={handlePassword}
+				type={"default"}
+				holder={"Entrez un mot de passe"}
+				errorMessage={passwordError}
+				isPassword
+			/>
+			<InputWithError
+				valeur={confirmPassword}
+				action={handleConfirmPassword}
+				type={"default"}
+				holder={"Confirmez mot de passe"}
+				errorMessage={confirmPasswordError}
+				isPassword
+			/>
+			<Bouton action={submit}>
+				<AntDesign name="login" size={24} color={colors.light_4} />
+				<Text style={{color: colors.light_4}} >S'inscrire</Text>
+			</Bouton>
+		</View>
+	);
 }
 
-
-const handleUserName= (text) => {
-    setUserNameError("");
-    setPassword(text);
-}
-
-
-const handleConfirmPassword= (text) => {
-    setUserNameError("");
-    setPassword(text);
-}
-
-
-const submit = () => {
-    if(email.includes("@") && password.length >=6 && userName.length>=3 && userName.length<13 &&  confirmPassword === password)
-    {
-        alert("Inscription réussie");
-        return;
-    }
-    setEmailError(!email.includes("@") ? "Email incorrect" : "");
-    setPasswordError(password.length < 6 ? "Mot de passe trop court (Minimum 6)" : "");
-    setUserNameError(userName.length <3 || userName.length>13 ? "Username incorrect" : "");
-    setConfirmPasswordError(confirmPassword !== password ? "le mot de passe ne sont pas les même" : "");
-
-};
-    return (
-        <View style={styles.container}>
-            
-        <InputWithError
-          holder="Email"
-          valeur={email}
-          action={handleEmail}
-          errorMessage={emailError}
-          type="email-adress"
-        />
-
-<InputWithError
-          holder="username"
-          valeur={userName}
-          action={handleUserName}
-          errorMessage={userNameError}
-          type="email-adress"
-        />
-
-
-<InputWithError
-          holder="Mot de passe"
-          valeur={password}
-          action={handlePassword}
-          errorMessage={passwordError}
-          type="default"
-          isPassword
-        />
-
-        
-<InputWithError
-          holder="Confirm mot de passe"
-          valeur={password}
-          action={handleConfirmPassword}
-          errorMessage={confirmPasswordError}
-          type="default"
-          isPassword
-        />
-
-
-<Bouton action={submit}>
-            {/* <AntDesign name="login" size={24} color="black" /> */}
-            <Text>Inscription</Text>
-            </Bouton>
-
-        </View>
-    );
-};
-
-// define your styles
 const styles = StyleSheet.create({
-    container: {},
+	container: {},
 });
-
-//make this component available to the app
-export default SignupForm;
