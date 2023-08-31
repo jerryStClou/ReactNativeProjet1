@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   container:{
-    width:"100%"
+    width:"100%",
+    flex:1
   }
 
 });

@@ -7,6 +7,7 @@ import { colors } from '../../libs/variable';
 import defaultAvatar from '../../assets/default-avatar.png'
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import Bouton from '../ui/Bouton';
 
 export default function Profil(props) {
 
@@ -20,6 +21,11 @@ export default function Profil(props) {
   const goToCamera = () =>{
     props.navigation.push("camera");
   }
+
+  const goModif = () =>{
+    props.navigation.push("modif")
+  }
+
   return (
     <View>
       <View>
@@ -30,7 +36,7 @@ export default function Profil(props) {
             height:size.width,
             maxWidth:300,
             maxHeight:300,
-            borderRadius:"50%"
+            borderRadius:150,
            } }
            source={objet.utilisateur.avatar ? objet.utilisateur.avatar: defaultAvatar}
          />
@@ -63,7 +69,13 @@ export default function Profil(props) {
          <Text>{objet.utilisateur.description ? objet.utilisateur.description : "Veuillez entrez une description" }</Text>
       </View> 
 
-    
+      <View style={styles.infoContainer}>
+        {/* <Pressable onPress={goModif}> */}
+           <Bouton action={goModif}>
+            <Text>Modifer</Text>  
+          </Bouton>
+        {/* </Pressable> */}
+      </View>    
     
       </View>
       </View>
