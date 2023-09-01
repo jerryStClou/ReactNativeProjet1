@@ -6,6 +6,7 @@ import Profil from "../pages/Profil";
 import Cam from "../pages/Cam"
 import { colors } from '../../libs/variable';
 import Modif from '../Container/Modif';
+import Carte from '../pages/Carte';
 
 // create a component
 
@@ -37,6 +38,10 @@ const ProfilStack = () => {
                options={{
                 title: "Modifier vos informations"
                }}/>
+               {/* <Stack.Screen name="map" component={Carte}
+                  options={{
+                   title: "Ou habitez-vous?"
+                  }}/> */}
         </Stack.Navigator>
     );
 };

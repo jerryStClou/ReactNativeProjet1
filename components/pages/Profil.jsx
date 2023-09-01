@@ -8,6 +8,7 @@ import defaultAvatar from '../../assets/default-avatar.png'
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import Bouton from '../ui/Bouton';
+import { ScrollView } from 'react-native-web';
 
 export default function Profil(props) {
 
@@ -22,12 +23,16 @@ export default function Profil(props) {
     props.navigation.push("camera");
   }
 
-  const goModif = () =>{
+  const goToEdit = () =>{
     props.navigation.push("modif")
   }
+  
+  // const goToCarte = () =>{
+  //   props.navigation.push("map")
+  // }
 
   return (
-    <View>
+    <ScrollView>
       <View>
          <Image
            style={{
@@ -71,14 +76,17 @@ export default function Profil(props) {
 
       <View style={styles.infoContainer}>
         {/* <Pressable onPress={goModif}> */}
-           <Bouton action={goModif}>
+           <Bouton action={goToEdit}>
             <Text>Modifer</Text>  
           </Bouton>
         {/* </Pressable> */}
+        {/* <Bouton action={goToCarte}>
+            <Text>Ouvrez la carte</Text>  
+          </Bouton> */}
       </View>    
     
       </View>
-      </View>
+      </ScrollView>
   )
 }
 
