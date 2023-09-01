@@ -9,17 +9,17 @@ import { colors } from "../../libs/variable";
 import { UtilisateurContext } from "../../App";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // create a component
-const Modif = () => {
+const Modif = (props) => {
 	// Créer les variables
 	const [email, setEmail] = useState("");
 	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
-	const [confirmPassword, setConfirmPassword] = useState("");
+	const [description, setDescription] = useState("");
+    const [descriptionError, setDescriptionError] = useState("")
 	const [emailError, setEmailError] = useState("");
 	const [usernameError, setUsernameError] = useState("");
-	const [passwordError, setPasswordError] = useState("");
-	const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
+
+	const objet = useContext(UtilisateurContext);
 
 
 	// Créer les fonction qui s'executent quand l'utilisateur tape dans les champs
@@ -31,13 +31,9 @@ const Modif = () => {
 		setUsernameError("");
 		setUsername(text);
 	};
-	const handlePassword = (text) => {
-		setPasswordError("");
-		setPassword(text);
-	};
-	const handleConfirmPassword = (text) => {
-		setConfirmPasswordError("");
-		setConfirmPassword(text);
+	const handleDescription = (text) => {
+		setDescriptionError("");
+		setDescription(text);
 	};
 
 	// Fonction qui s'execute quand l'utilisateur submit
@@ -46,15 +42,15 @@ const Modif = () => {
 			email.includes("@") &&
 			username.length >= 3 &&
 			username.length < 12 &&
-			password.length >= 6 &&
-			password === confirmPassword
+			description.length <= 200
 		) {
 			// Envoyer une requete vers la backend
             await AsyncStorage.setItem(
                 "user",
-                JSON.stringify({email:email, username:username})
+                JSON.stringify({...objet.utilisateur,email:email, username:username, description:description})
             );
-			objet.setUtilisateur({email: email, username: username})
+			objet.setUtilisateur({...objet.utilisateur, email: email, username: username, description:description});
+			props.navigation.goBack();
 			return;
 		}
 		setEmailError(!email.includes("@") ? "Email incorrect" : "");
@@ -63,10 +59,8 @@ const Modif = () => {
 				? "username incorrect (Max. 12, min. 3)"
 				: ""
 		);
-		setPasswordError(password.length < 6 ? "Mot de passe trop court" : "");
-
-		setConfirmPasswordError(
-			password !== confirmPassword ? "Les mots ne sont pas identiques" : ""
+		setDescriptionError(
+			description.length > 200 ? "Description trop longue, Max 200": ""
 		);
 	};
 
@@ -91,23 +85,14 @@ const Modif = () => {
 				errorMessage={usernameError}
 			/>
 			<InputWithError
-				valeur={password}
-				action={handlePassword}
-				type={"default"}
-				holder={"Entrez un mot de passe"}
-				errorMessage={passwordError}
-				isPassword
-			/>
-			<InputWithError
-				valeur={confirmPassword}
-				action={handleConfirmPassword}
-				type={"default"}
-				holder={"Confirmez mot de passe"}
-				errorMessage={confirmPasswordError}
-				isPassword
+				valeur={description}
+				action={handleDescription}
+				type={"email-adress"}
+				holder={"Veuillez entrez une description"}
+				errorMessage={descriptionError}
 			/>
             <Bouton action={submit}>
-				<AntDesign name="login" size={24} color={colors.light_4} />
+				{/* <AntDesign name="login" size={24} color={colors.light_4} /> */}
 				<Text style={{color: colors.light_4}} >Enregistrer</Text>
 			</Bouton>
         </View>
